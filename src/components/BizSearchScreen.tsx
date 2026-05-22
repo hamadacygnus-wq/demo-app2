@@ -70,8 +70,7 @@ export function BizSearchScreen() {
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-8">
           <div className="flex items-center gap-2">
             <Building2 className="h-8 w-8 text-sky-400" />
-            <h1 className="text-2xl font-black tracking-wider text-white">BizSearch</h1>
-            <span className="ml-2 text-xs font-bold text-slate-400 border border-slate-600 px-2 py-0.5 rounded">デモ版</span>
+            <h1 className="text-2xl font-black tracking-wider text-white">【デモ】サイトクローリング</h1>
           </div>
           
           <div className="flex-1 max-w-3xl flex bg-white rounded-md overflow-hidden">
@@ -149,7 +148,7 @@ export function BizSearchScreen() {
             ))}
           </div>
 
-          {/* ページネーション（ちゃんと動くようになりました！） */}
+          {/* ページネーション */}
           <div className="mt-8 flex justify-center items-center gap-2 pb-10">
             {/* 前へボタン */}
             <button
