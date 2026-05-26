@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-// ベースとなるダミーデータ（ここから30件のユニークなデータを作ります）
+// ベースとなるダミーデータ
 const BASE_COMPANIES = [
   { name: "株式会社ダミーテクノロジー", address: "東京都渋谷区道玄坂1-2-3 渋谷ダミービル4F", rep: "山田 太郎", capital: "5,000万円", industry: "IT・通信" },
   { name: "サンプルソリューションズ株式会社", address: "東京都新宿区西新宿4-5-6 新宿サンプルタワー12F", rep: "鈴木 一郎", capital: "1億円", industry: "IT・通信" },
@@ -26,15 +26,15 @@ const BASE_COMPANIES = [
   { name: "サンプルメディア株式会社", address: "東京都台東区上野7-7-7 上野サンプルビル9F", rep: "加藤 あゆみ", capital: "2,000万円", industry: "メディア・出版" },
 ];
 
-// 3ページ分（30件）のデータになるよう自動生成
-const DUMMY_COMPANIES = Array.from({ length: 30 }, (_, i) => {
+// 150件（50件×3ページ分）のデータになるよう自動生成
+const DUMMY_COMPANIES = Array.from({ length: 150 }, (_, i) => {
   const base = BASE_COMPANIES[i % 10];
-  const page = Math.floor(i / 10) + 1;
-  // ページごとに少し名前を変えて、別会社っぽく見せる
-  const companyName = page === 1 ? base.name : page === 2 ? `【新】${base.name}` : `${base.name} 第${page}事業部`;
+  const page = Math.floor(i / 50) + 1; // 50件ごとにページを判定
+  // 件数が多いので、バリエーションを持たせるための名前調整
+  const suffix = i >= 10 ? ` 支社${Math.floor(i / 10)}` : "";
   return {
     id: i + 1,
-    name: companyName,
+    name: `${base.name}${suffix}`,
     // 電話番号も1件ずつ違う番号になるように生成
     phone: `03-${String(1000 + i).padStart(4, '0')}-${String(5678 + i).padStart(4, '0')}`,
     address: base.address,
@@ -45,12 +45,12 @@ const DUMMY_COMPANIES = Array.from({ length: 30 }, (_, i) => {
 });
 
 export function BizSearchScreen() {
-  // 現在のページ番号を管理するステート（初期値は1）
+  // 現在のページ番号を管理するステート
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 50; // ★ここで1ページ50件表示に変更！
   const totalPages = 3;
 
-  // 現在のページに表示する10件を切り出す
+  // 現在のページに表示する50件を切り出す
   const currentCompanies = DUMMY_COMPANIES.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -74,7 +74,7 @@ export function BizSearchScreen() {
           </div>
           
           <div className="flex-1 max-w-3xl flex bg-white rounded-md overflow-hidden">
-            <input type="text" value="東京都　IT・通信" readOnly className="flex-1 px-4 py-2.5 text-slate-800 outline-none font-bold" />
+            <input type="text" value="東京都 IT・通信" readOnly className="flex-1 px-4 py-2.5 text-slate-800 outline-none font-bold" />
             <button className="bg-sky-500 hover:bg-sky-600 transition px-6 py-2.5 font-bold flex items-center gap-2">
               <Search className="h-5 w-5" />
               検索する
@@ -110,7 +110,7 @@ export function BizSearchScreen() {
               「<span className="text-sky-600">東京都 IT・通信</span>」の検索結果
             </h2>
             <div className="text-sm font-bold text-slate-500">
-              全 <span className="text-lg text-slate-800">450</span> 件中 {(currentPage - 1) * 10 + 1}〜{currentPage * 10}件を表示
+              全 <span className="text-lg text-slate-800">450</span> 件中 {(currentPage - 1) * itemsPerPage + 1}〜{Math.min(currentPage * itemsPerPage, 450)}件を表示
             </div>
           </div>
 
